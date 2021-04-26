@@ -31,6 +31,12 @@ jobs:
       # Build ADempiere with ant
       - name: Build Adempiere ...
         run: |
+           echo $GITHUB_TOKEN
+           echo $secrets.GITHUB_TOKEN
+           echo $secrets.TOKEN_ACCESS
+           echo ${{ GITHUB_TOKEN }}
+           echo ${{ secrets.GITHUB_TOKEN }}
+           echo ${{ secrets.TOKEN_ACCESS }}
            echo $GITHUB_REF
            echo $GITHUB_HEAD_REF
            echo $GITHUB_BASE_REF
@@ -50,7 +56,7 @@ jobs:
       - name: Upload zip
         uses: skx/github-action-publish-binaries@master
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_ACCESS }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           args: 'install/build/*.zip'
       - name: Upload zip.MD5
