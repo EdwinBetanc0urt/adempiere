@@ -147,6 +147,11 @@ public class Translation
 	 */
 	public String exportTrl (String directory, int AD_Client_ID, String AD_Language, String Trl_Table)
 	{
+		if (directory.endsWith(File.separator)) {
+			// remove end separator file path
+			directory.substring(1, directory.length() - 1);
+		}
+
 		String fileName = directory + File.separator + Trl_Table + "_" + AD_Language + ".xml";
 		log.info(fileName);
 		File out = new File(fileName);
