@@ -36,6 +36,7 @@ import org.compiere.util.DB;
 import org.compiere.util.Env;
 import org.compiere.util.Ini;
 import org.compiere.util.Util;
+import org.eevolution.process.GenerateSurrogateKeys;
 import org.eevolution.service.dsl.ProcessBuilder;
 
 public class MigrationLoader {
@@ -125,7 +126,16 @@ public class MigrationLoader {
 						.executeUsingSystemRole();
 				log.log(Level.INFO, "Process=" + processInfoRoleAccessUpdate.getTitle() + " Client=(" + client.getValue() + " - " + client.getName() + ") Error="+processInfoRoleAccessUpdate.isError() + " Summary=" + processInfoRoleAccessUpdate.getSummary());
 			});
-			//	
+
+			// Generate Surrogate Keys
+			processInfo = ProcessBuilder.create(context)
+				.process(org.eevolution.process.GenerateSurrogateKeys.class)
+				.withTitle(GenerateSurrogateKeys.getProcessName())
+				.withParameter(GenerateSurrogateKeys.IsGenerateUUID, true)
+				.executeUsingSystemRole();
+			log.log(Level.INFO, "Process=" + processInfo.getTitle() + " Error=" + processInfo.isError() + " Summary=" + processInfo.getSummary());
+
+			//
 			processInfo = ProcessBuilder.create(context)
 					.process(org.compiere.process.GardenWorldCleanup.class)
 					.withTitle("Updating Garden World")
