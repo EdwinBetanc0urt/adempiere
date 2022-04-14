@@ -372,6 +372,9 @@ public class MDocType extends X_C_DocType
 				
 			}
 			MDocBaseType docBaseType =MDocBaseType.get(getC_DocBaseType_ID());
+			// error al crear compa;ia
+			System.out.print(docBaseType.getDocBaseType());
+			System.out.println(getDocBaseType());
 			if (!docBaseType.getDocBaseType().equals(getDocBaseType()))
 				valid.set(false);
 		});
