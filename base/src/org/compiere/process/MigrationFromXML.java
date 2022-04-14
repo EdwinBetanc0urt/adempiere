@@ -95,7 +95,7 @@ public class MigrationFromXML extends MigrationFromXMLAbstract {
 			{
 				log.log(Level.CONFIG, "Processing migration files in directory: " + file.getAbsolutePath() );
 				// Recursively find files
-				migrationFiles = (List<File>) FileUtils.listFiles(file, new String[]{"xml"}, true);
+				migrationFiles = (List<File>) FileUtils.listFiles(file, new String[]{"xml", "XML"}, true);
 				Collections.sort(migrationFiles, fileComparator);
 			}
 			else {
@@ -126,7 +126,9 @@ public class MigrationFromXML extends MigrationFromXMLAbstract {
 
 		if (!file.exists()) return;
 		
-		if (!file.getName().endsWith(".xml")) return;
+		if (!(file.getName().endsWith(".xml") || file.getName().endsWith(".XML"))) {
+			return;
+		}
 		
 		if (file.getName().equals("build.xml")) return; 
 		
