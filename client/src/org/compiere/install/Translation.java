@@ -102,35 +102,39 @@ public class Translation
 	 * 	Import Translation.
 	 * 	Uses TranslationHandler to update translation
 	 *	@param directory file directory
-	 * 	@param AD_Client_ID only certain client if id >= 0
-	 * 	@param AD_Language language
-	 * 	@param Trl_Table table
+	 * 	@param clientId only certain client if id >= 0
+	 * 	@param language language
+	 * 	@param trlTable table
 	 * 	@return status message
 	 */
-	public String importTrl (String directory, int AD_Client_ID, String AD_Language, String Trl_Table)
+	public String importTrl (String directory, int clientId, String language, String trlTable)
 	{
-		String fileName = directory + File.separator + Trl_Table + "_" + AD_Language + ".xml";
+		if (directory.endsWith(File.separator)) {
+			// remove end separator file path
+			directory.substring(1, directory.length() - 1);
+		}
+
+		String fileName = directory + File.separator + trlTable + "_" + language + ".xml";
 		log.info(fileName);
 		File in = new File (fileName);
-		if (!in.exists())
-		{
+		if (!in.exists()) {
 			String msg = "File does not exist: " + fileName;
 			log.log(Level.SEVERE, msg);
 			return msg;
 		}
 
-		try
-		{
-			TranslationHandler handler = new TranslationHandler(AD_Client_ID);
+		try {
+			TranslationHandler handler = new TranslationHandler(clientId);
 			SAXParserFactory factory = SAXParserFactory.newInstance();
-		//	factory.setValidating(true);
+			//	factory.setValidating(true);
 			SAXParser parser = factory.newSAXParser();
 			parser.parse(in, handler);
-			log.info("Updated=" + handler.getUpdateCount());
-			return Msg.getMsg(m_ctx, "Updated") + "=" + handler.getUpdateCount();
+			
+			String msg = Msg.getMsg(m_ctx, "Updated") + "=" + handler.getUpdateCount() + ". " + trlTable;
+			log.log(Level.SEVERE, msg);
+			return msg;
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			log.log(Level.SEVERE, "importTrl", e);
 			return e.toString();
 		}
